@@ -26,14 +26,20 @@ from .base import BPError, BusPirate, ProtocolError
 
 
 class SPI(BusPirate):
-    SPEEDS = {'30kHz' : 0b000,
-             '125kHz': 0b001,
-             '250kHz': 0b010,
-             '1MHz'  : 0b011,
-             '2MHz'  : 0b100,
-             '2.6MHz': 0b101,
-             '4MHz'  : 0b110,
-             '8MHz'  : 0b111}
+    # updated speeds table for Bus Pirate firmware v7.1
+    SPEEDS = { '31kHz'  : 0,
+               '125kHz' : 1,
+               '250kHz' : 2,
+               '1MHz'   : 3,
+               '50kHz'  : 4,
+               '1.3MHz' : 5,
+               '2MHz'   : 6,
+               '2.6MHz' : 7,
+               '3.2MHz' : 8,
+               '4MHz'   : 9,
+               '5.3MHz' : 10,
+               '8MHz'   : 11}
+
 
     CFG_SAMPLE = 0x01
     CFG_CLK_EDGE = 0x02
@@ -153,10 +159,12 @@ class SPI(BusPirate):
         Parameters
         ----------
         cfg : byte
-                CFG_SAMPLE: sample time (0 = middle)
-                CFG_CLK_EDGE: clock edge (1 = active to idle)
-                CFG_IDLE: clock idle phase (0 = low)
-                CFG_PUSH_PULL: pin output (0 = HiZ, 1 = push-pull)
+              1000wxyz - SPI config, w=HiZ/3.3v, x=CKP idle, y=CKE edge, z=SMP sample
+
+                z: CFG_SAMPLE: sample time (0 = middle)
+                y: CFG_CLK_EDGE: clock edge (1 = active to idle)
+                x: CFG_IDLE: clock idle phase (0 = low)
+                w: CFG_PUSH_PULL: pin output (0 = HiZ, 1 = push-pull)
 
         Examples
         -------
